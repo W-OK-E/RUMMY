@@ -13,7 +13,7 @@ pile={
 
 class RUMMY():
   
-
+  
   def __init__(self):
     self.num_players,self.turn_count=0,0
     self.players,self.set_pile={},[]
@@ -25,6 +25,19 @@ class RUMMY():
     self.choice_made=False
     self.standard_seq=['A','2','3','4','5','6','7','8','9','10','JACK','QUEEN','KING','JOKER']
 
+  def check_Winner(self):
+     """This Function is designed to check for the Winner at the end of each round"""
+     win=[False for i in range(len(self.player_names))]
+     player_count=0
+     for player in self.player_names:
+        for suit in self.players[player]:
+           if len(self.players[player][suit]==0):
+              win[player_count]=True
+           else:
+              win[player_count]=False
+        player_count+=1
+     for i in range(len(win)):
+        return i if win[i] else None
 
   def get_player_names(self):
     """This Function just obtains the player count and Player names from the User and
@@ -451,6 +464,10 @@ Do you have a joker(WILD or PRINTED)??\nYour Collection:\n",self.players[self.cu
           self.turn_count+=1
         else:
           self.turn_count=0
+        try:
+          self.winner=self.player_names[self.check_Winner()]
+        except:
+          pass
 
      
           
