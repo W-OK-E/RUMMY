@@ -6,3 +6,8 @@ And so we have this!!😁
 
 P.S.- I have never really played  any card came so if there's any fishy game logic, feel free to raise issues, 
 suggestions are always welcome.
+
+To run the program download the python script, navigate to the downloaded directory and run the following command:
+'''
+python rummy.py
+'''
