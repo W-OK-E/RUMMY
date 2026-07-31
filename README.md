@@ -1,13 +1,69 @@
-# RUMMY
-An attempt to make a simple CLI version of the card game-Rummy.
-Another Odd day at College, my hostel neighbor came up to me and gave me a task,"Hey Dude, Can you code Rummy??"
-I was like, "Well that's interesting! Lemme give it a try...."
-And so we have this!!😁
+# Rummy
 
-P.S.- I have never really played  any card came so if there's any fishy game logic, feel free to raise issues, 
-suggestions are always welcome.
+A modular Python implementation of the classic Rummy card game, refactored for agent-based play and reinforcement-learning experiments.
 
-To run the program download the python script, navigate to the downloaded directory and run the following command:<br>
-<br>
-python rummy.py
+This repository turns a single legacy script into an importable package (`rummy/`) with clear separation for:
 
+- Card definitions and helpers (rummy/cards.py)
+- Deck and discard pile management (rummy/deck.py)
+- Game rules and meld validation (rummy/game.py)
+- A simple RL-style environment wrapper (rummy/env.py)
+- A small random agent example (rummy/agents.py)
+
+Why this project
+
+- Make the Rummy game engine testable and importable for research or challenge tasks.
+- Provide a minimal environment API so agents can play without human input.
+- Include CI and tests so merges won't regress core behavior.
+
+Quick start (using uv)
+
+All startup, installs and test runs should use the provided uv environment wrapper from this directory.
+
+1. Open a shell in the repository root and change into the RUMMY folder:
+
+    cd RUMMY
+
+2. Run tests and install dev deps (example):
+
+    uv run python3 -m pip install --upgrade pip
+    uv run python3 -m pip install pytest
+    uv run python3 -m pytest -q
+
+3. Run the example entrypoint (small simulation):
+
+    uv run python3 Rummy.py
+
+Package usage (importing in code)
+
+- From your Python code you can import the environment and game directly:
+
+    from rummy.env import RummyEnv
+    from rummy.game import RummyGame
+
+- Create an environment and reset to get the first observation:
+
+    env = RummyEnv(["Alice", "Bob"], seed=42)
+    obs = env.reset()
+
+Testing and CI
+
+- The repository contains unit tests under `tests/` that validate deck size, dealing, and meld/sequence validation.
+- A GitHub Actions workflow at `.github/workflows/python-app.yml` runs the tests on push and pull requests.
+
+Challenge notes
+
+This repo is intended as a small challenge: some rules and edge cases are intentionally simplified and there are three suggested issues for contributors to improve:
+
+- Fix winner detection and game-end flow
+- Improve meld and wildcard validation rules
+- Expand the RL observation/action API for agents
+
+Contributing
+
+- Open a PR with targeted changes and include/adjust tests to cover the change.
+- The CI workflow will run the test-suite automatically.
+
+License
+
+- This project is provided as-is for educational and challenge purposes. Add a license file if you want to publish it.

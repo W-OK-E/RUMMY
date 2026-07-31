@@ -1,0 +1,14 @@
+[project]
+name = "rummy"
+version = "0.1.0"
+description = "A modular Rummy environment for agent-based play and reinforcement learning experiments."
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = []
+
+[project.optional-dependencies]
+dev = ["pytest>=8.0"]
+
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
