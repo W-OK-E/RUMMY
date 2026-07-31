@@ -1,22 +1,8 @@
 # Rummy
 
-A modular Python implementation of the classic Rummy card game, refactored for agent-based play and reinforcement-learning experiments.
+A modular Python implementation of the classic Rummy card game - but to be played by *agents* :)
 
-This repository turns a single legacy script into an importable package (`rummy/`) with clear separation for:
-
-- Card definitions and helpers (rummy/cards.py)
-- Deck and discard pile management (rummy/deck.py)
-- Game rules and meld validation (rummy/game.py)
-- A simple RL-style environment wrapper (rummy/env.py)
-- A small random agent example (rummy/agents.py)
-
-Why this project
-
-- Make the Rummy game engine testable and importable for research or challenge tasks.
-- Provide a minimal environment API so agents can play without human input.
-- Include CI and tests so merges won't regress core behavior.
-
-Quick start (using uv)
+### Quick start (using uv)
 
 All startup, installs and test runs should use the provided uv environment wrapper from this directory.
 
