@@ -58,3 +58,78 @@ def test_env_invalid_action_returns_penalty() -> None:
     assert reward == -1
     assert done is False
     assert "error" in info
+
+
+# Challenge tests for contributors
+
+# The tests in this file are intentionally commented out by default. They represent
+# the additional checks that a contributor should satisfy when addressing the
+# repository's challenge issues. To run them locally, uncomment the tests you want
+# to execute (remove the leading # from the test function and any helper imports)
+# and run: `uv run python3 -m pytest tests/test_challenge_issues.py -q`
+
+# Note: these tests are stricter than the baseline tests and are meant to be run only on PRs submitted for
+# a issue
+
+
+from rummy.game import RummyGame
+from rummy.env import RummyEnv
+from rummy.cards import Card
+
+
+def test_winner_detection_when_hand_becomes_empty():
+    """A player who successfully melds and discards down to zero cards should
+    be immediately recognized as the winner. This should work through both the
+    RummyGame API and the RummyEnv (declare action).
+    """
+    game = RummyGame(["P1", "P2"], seed=2026)
+    # Force a simple scenario: give P1 an empty hand and P2 some cards
+    game.players = {"P1": [], "P2": [("Hearts", "A")]}
+    # Game-level check
+    assert game.is_winner("P1") is True
+    # Environment-level declare should succeed and mark done
+    env = RummyEnv(["P1", "P2"], seed=2026)
+    env.game = game
+    obs, reward, done, info = env.step({"type": "declare"})
+    assert done is True
+    assert reward == 1
+    assert info.get("winner") == "P1"
+
+
+def test_meld_validation_rejects_excessive_jokers_and_duplicate_cards():
+    """Meld validation must:
+     - reject melds that contain duplicate exact cards
+     - reject melds where jokers/wilds are not used according to rules (e.g.,
+       number of wilds must be strictly less than number of natural cards and
+       maximum wilds allowed is 2)
+    """
+    game = RummyGame(["A", "B"], seed=42)
+    game.wild_rank = "7"
+    # duplicate exact same card should be invalid
+    duplicate_meld = [("Spades", "5"), ("Spades", "5"), ("Clubs", "5")]
+    assert game._validate_card_set(duplicate_meld) is False
+    # too many jokers relative to naturals should be invalid
+    bad_meld = [("Hearts", "5"), ("Clubs", "JOKER"), ("Diamonds", "JOKER")]
+    assert game._validate_card_set(bad_meld) is False
+
+
+def test_rl_invalid_action_does_not_advance_turn_or_corrupt_state():
+    """Submitting an invalid action through the environment should return a
+    penalty (negative reward) and must not advance the current player or
+    mutate the deck/discard piles.
+    """
+    env = RummyEnv(["A", "B"], seed=99)
+    obs = env.reset()
+    before_player = env.game.current_player
+    before_deck = len(env.game.deck.cards)
+    before_discard = len(env.game.deck.discard_pile)
+    observation, reward, done, info = env.step({"type": "discard_card", "card": ("Hearts", "FAKE")})
+    assert reward < 0
+    # player should remain the same because the action was invalid
+    assert env.game.current_player == before_player
+    # deck and discard pile should be unchanged
+    assert len(env.game.deck.cards) == before_deck
+    assert len(env.game.deck.discard_pile) == before_discard
+
+
+End of challenge tests
