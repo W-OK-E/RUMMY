@@ -131,5 +131,3 @@ def test_rl_invalid_action_does_not_advance_turn_or_corrupt_state():
     assert len(env.game.deck.cards) == before_deck
     assert len(env.game.deck.discard_pile) == before_discard
 
-
-End of challenge tests
